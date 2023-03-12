@@ -53,4 +53,11 @@ public class Employee {
         this.email = email;
     }
 
+    public boolean getIsDeleted() {
+        return false;
+    }
+
+    public void setIsDeleted(boolean b) {
+
+    }
 }

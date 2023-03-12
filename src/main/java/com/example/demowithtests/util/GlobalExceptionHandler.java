@@ -30,6 +30,27 @@ public class GlobalExceptionHandler {
         ErrorDetails errorDetails = new ErrorDetails(new Date(), ex.getMessage(), request.getDescription(false));
         return new ResponseEntity<>(errorDetails, HttpStatus.INTERNAL_SERVER_ERROR);
     }
+    @ExceptionHandler(EmployeeAlreadyExistsException.class)
+    public ResponseEntity<?> employeeAlreadyExistsException() {
+        return new ResponseEntity<>(new MyGlobalExceptionHandler("Employee already exists."), HttpStatus.CONFLICT);
+    }
+    @ExceptionHandler(InvalidEmployeeException.class)
+    public ResponseEntity<?> invalidEmployeeException() {
+        return new ResponseEntity<>(new MyGlobalExceptionHandler("All fields must be filled in."), HttpStatus.CONFLICT);
+    }
+    @ExceptionHandler(EmployeesNotFoundException.class)
+    public ResponseEntity<?> employeesNotFoundException() {
+        return new ResponseEntity<>(new MyGlobalExceptionHandler("Employees not found."), HttpStatus.NOT_FOUND);
+    }
+    @ExceptionHandler(DatabaseAccessException.class)
+    public ResponseEntity<?> databaseAccessException() {
+        return new ResponseEntity<>(new MyGlobalExceptionHandler("Database access error."), HttpStatus.CONFLICT);
+    }
+    @ExceptionHandler(IdEmployeeNotFoundException.class)
+    public ResponseEntity<?> idEmployeeNotFoundException() {
+        return new ResponseEntity<>(new MyGlobalExceptionHandler("Employee not found."), HttpStatus.NOT_FOUND);
+    }
+
 
     @Data
     @AllArgsConstructor
