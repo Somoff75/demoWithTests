@@ -52,8 +52,10 @@ public class ServiceBean implements Service {
                 throw new DeletedEmployeeException();
             }
             return employee;
-        } catch (Exception e) {
-            throw new DatabaseAccessException();
+//        } catch (Exception e) {
+//            throw new DatabaseAccessException();
+        } finally {
+            log.info("Get employee by id: " + id);
         }
     }
 

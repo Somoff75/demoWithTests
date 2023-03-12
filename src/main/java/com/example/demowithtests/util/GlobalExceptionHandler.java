@@ -24,7 +24,6 @@ public class GlobalExceptionHandler {
     protected ResponseEntity<MyGlobalExceptionHandler> handleDeleteException() {
         return new ResponseEntity<>(new MyGlobalExceptionHandler("This user was deleted"), HttpStatus.NOT_FOUND);
     }
-
     @ExceptionHandler(Exception.class)
     public ResponseEntity<?> globleExcpetionHandler(Exception ex, WebRequest request) {
         ErrorDetails errorDetails = new ErrorDetails(new Date(), ex.getMessage(), request.getDescription(false));
@@ -50,7 +49,10 @@ public class GlobalExceptionHandler {
     public ResponseEntity<?> idEmployeeNotFoundException() {
         return new ResponseEntity<>(new MyGlobalExceptionHandler("Employee not found."), HttpStatus.NOT_FOUND);
     }
-
+    @ExceptionHandler(DeletedEmployeeException.class)
+    public ResponseEntity<?> deletedEmployeeException() {
+        return new ResponseEntity<>(new MyGlobalExceptionHandler("Employee was deleted."), HttpStatus.CONFLICT);
+    }
 
     @Data
     @AllArgsConstructor
