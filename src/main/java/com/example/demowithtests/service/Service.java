@@ -1,7 +1,6 @@
 package com.example.demowithtests.service;
 
 import com.example.demowithtests.domain.Employee;
-import com.example.demowithtests.util.DatabaseAccessException;
 
 import java.util.List;
 
@@ -9,7 +8,7 @@ public interface Service {
 
     Employee create(Employee employee);
 
-    List<Employee> getAll() throws DatabaseAccessException;
+    List<Employee> getAll();
 
     Employee getById(Integer id);
 
@@ -18,5 +17,13 @@ public interface Service {
     void removeById(Integer id);
 
     void removeAll();
+
+    List<Employee> processor();
+
+
+    List<Employee> sendEmailByCountry(String country, String text);
+
+    List<Employee> sendEmailByCity(String city, String text);
+
 
 }
