@@ -43,7 +43,7 @@ public class GlobalExceptionHandler {
     }
     @ExceptionHandler(DatabaseAccessException.class)
     public ResponseEntity<?> databaseAccessException() {
-        return new ResponseEntity<>(new MyGlobalExceptionHandler("Database access error."), HttpStatus.CONFLICT);
+        return new ResponseEntity<>(new MyGlobalExceptionHandler("Database access error."), HttpStatus.INTERNAL_SERVER_ERROR);
     }
     @ExceptionHandler(IdEmployeeNotFoundException.class)
     public ResponseEntity<?> idEmployeeNotFoundException() {
@@ -52,6 +52,11 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(DeletedEmployeeException.class)
     public ResponseEntity<?> deletedEmployeeException() {
         return new ResponseEntity<>(new MyGlobalExceptionHandler("Employee was deleted."), HttpStatus.CONFLICT);
+    }
+    @ExceptionHandler(WrongTypeOfDataException.class)
+    public ResponseEntity<?> wrongTypeOfDataHandler(Exception ex, WebRequest request) {
+        ErrorDetails errorDetails = new ErrorDetails(new Date(), ex.getMessage(), request.getDescription(false));
+        return new ResponseEntity<>(errorDetails, HttpStatus.UNPROCESSABLE_ENTITY);
     }
 
     @Data
