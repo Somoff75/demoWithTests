@@ -18,6 +18,10 @@ public interface Service {
 
     void removeAll();
 
+    void fillDatabase(String quantity);
+
+    void updateByCountry(String country);
+
     List<Employee> processor();
 
 
@@ -26,4 +30,8 @@ public interface Service {
     List<Employee> sendEmailByCity(String city, String text);
 
 
+    void cleverUpdateByCountry(String oldCountry, String newCountry);
+
+
+    Employee createEmployee(String name, String country, String email);
 }
