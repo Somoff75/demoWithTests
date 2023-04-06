@@ -1,8 +1,10 @@
 package com.example.demowithtests.web;
 
 import com.example.demowithtests.domain.Employee;
+import com.example.demowithtests.dto.EmployeeDto;
+import com.example.demowithtests.dto.EmployeeReadDto;
 import com.example.demowithtests.service.Service;
-import lombok.AllArgsConstructor;
+import com.example.demowithtests.util.orica.EmployeeConverter;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -10,17 +12,29 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@AllArgsConstructor
+//@AllArgsConstructor
+
 @RequestMapping(value = "/api", produces = MediaType.APPLICATION_JSON_VALUE)
 public class Controller {
 
     private final Service service;
+    private final EmployeeConverter employeeConverter;
+
+    public Controller(Service service, EmployeeConverter employeeConverter) {
+        this.service = service;
+        this.employeeConverter = employeeConverter;
+    }
+
 
     //Операция сохранения юзера в базу данных
     @PostMapping("/users")
     @ResponseStatus(HttpStatus.CREATED)
-    public Employee saveEmployee(@RequestBody Employee employee) {
-        return service.create(employee);
+    public EmployeeDto saveEmployee(@RequestBody EmployeeDto employeeDto) {
+        return employeeConverter.toDto(
+                service.create(
+                        employeeConverter.getMapperFacade().map(employeeDto, Employee.class)
+                )
+        );
     }
 
     //Получение списка юзеров
@@ -33,17 +47,15 @@ public class Controller {
     //Получения юзера по id
     @GetMapping("/users/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public Employee getEmployeeById(@PathVariable String id){
-        Integer parsedId = Integer.parseInt(id);
-        return service.getById(parsedId);
+    public EmployeeReadDto getEmployeeById(@PathVariable Integer id) {
+        return employeeConverter.toReadDto(service.getById(id));
     }
 
     //Обновление юзера
     @PutMapping("/users/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public Employee refreshEmployee(@PathVariable("id") String id, @RequestBody Employee employee) {
-        Integer parseId = Integer.parseInt(id);
-        return service.updateById(parseId, employee);
+    public EmployeeReadDto refreshEmployee(@PathVariable("id") Integer id, @RequestBody EmployeeDto employeeDto) {
+        return employeeConverter.toReadDto(service.updateById(id, employeeConverter.fromDto(employeeDto)));
     }
 
     //Удаление по id
@@ -60,21 +72,39 @@ public class Controller {
     public void removeAllUsers() {
         service.removeAll();
     }
+
     @PostMapping("/sendEmailByCountry")
     @ResponseStatus(HttpStatus.OK)
-    public void sendEmailsByCountry(@RequestParam String country, @RequestParam String text){
+    public void sendEmailByCountry(@RequestParam String country, @RequestParam String text) {
         service.sendEmailByCountry(country, text);
     }
 
     @GetMapping("/replaceNull")
     @ResponseStatus(HttpStatus.OK)
-    public void replaceNull(){
+    public void replaceNull() {
         service.processor();
     }
 
     @PostMapping("/sendEmailByCity")
     @ResponseStatus(HttpStatus.OK)
-    public void sendEmailsByCity(@RequestParam String cities, @RequestBody String text){
-        service.sendEmailByCity(cities, text);
+    public void sendEmailByCity(@RequestParam String city, @RequestParam String text) {
+        service.sendEmailByCity(city, text);
+    }
+
+    @PostMapping("/fillDatabase/{quantity}")
+    @ResponseStatus(HttpStatus.OK)
+    public void fillDatabase(@PathVariable String quantity) {
+        service.fillDatabase(quantity);
+
+    }
+    @PostMapping("/updateByCountry")
+    @ResponseStatus(HttpStatus.OK)
+    public void updateByCountry(@RequestParam String country) {
+        service.updateByCountry(country);
+    }
+    @PostMapping("/cleverUpdateByCountry")
+    @ResponseStatus(HttpStatus.OK)
+    public void cleverUpdateByCountry(@RequestParam String oldCountry,@RequestParam String newCountry) {
+        service.cleverUpdateByCountry(oldCountry,newCountry);
     }
 }

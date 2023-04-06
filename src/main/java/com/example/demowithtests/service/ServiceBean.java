@@ -3,19 +3,26 @@ package com.example.demowithtests.service;
 import com.example.demowithtests.domain.Employee;
 import com.example.demowithtests.repository.Repository;
 import com.example.demowithtests.util.*;
-import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
-import java.util.logging.Logger;
 
-@AllArgsConstructor
-//@Slf4j
+
+//@AllArgsConstructor
+@Slf4j
 @org.springframework.stereotype.Service
+
 public class ServiceBean implements Service {
 
     private final Repository repository;
-    private static final Logger log = Logger.getLogger(ServiceBean.class.getName());
+
+    public ServiceBean(Repository repository) {
+        this.repository = repository;
+    }
+
 
     @Override
     public Employee create(Employee employee) {
@@ -23,10 +30,9 @@ public class ServiceBean implements Service {
 
             throw new InvalidEmployeeException();
         }
-        log.info("create() - end: employee = {}" + employee);
-
         return repository.save(employee);
     }
+
     @Override
     public List<Employee> getAll() {
         List<Employee> employeesList;
@@ -40,7 +46,7 @@ public class ServiceBean implements Service {
 
     @Override
     public Employee getById(Integer id) {
-        var employee = repository.findById(id).orElseThrow(IdEmployeeNotFoundException::new);
+        Employee employee = repository.findById(id).orElseThrow(IdEmployeeNotFoundException::new);
 
         if (employee.getIsDeleted()) {
             throw new DeletedEmployeeException();
@@ -95,22 +101,21 @@ public class ServiceBean implements Service {
 
     @Override
     public List<Employee> processor() {
-        log.info("replace null  - start");
+//        log.info("replace null  - start");
         List<Employee> replaceNull = repository.findAllByIsDeletedNull();
-        log.info("replace null after replace: " + replaceNull);
+//        log.info("replace null after replace: " + replaceNull);
         for (Employee emp : replaceNull) {
             emp.setIsDeleted(Boolean.FALSE);
         }
-        log.info("replaceNull = {} ");
-        log.info("replace null  - end:");
-        repository.saveAll(replaceNull);
-        return replaceNull;
-    }
+//        log.info("replaceNull = {} ");
+//        log.info("replace null  - end:");
+        return repository.saveAll(replaceNull);
 
+    }
 
     @Override
     public List<Employee> sendEmailByCountry(String country, String text) {
-        List<Employee> employees = repository.findAllByCountry(country);
+        List<Employee> employees = repository.findAllByCountry();
         senderEmails(extracted(employees), text);
         return employees;
     }
@@ -122,6 +127,7 @@ public class ServiceBean implements Service {
         return employees;
     }
 
+
     private static List<String> extracted(List<Employee> employees) {
         List<String> emails = new ArrayList<>();
         for (Employee emp : employees) {
@@ -130,8 +136,51 @@ public class ServiceBean implements Service {
         return emails;
     }
 
-    public void senderEmails(List<String> emails, String text) {
-        log.info("Sending emails to: " + emails);
+    @Override
+    public void fillDatabase(String quantityString) {
+        int quantity = Integer.parseInt(quantityString);
+        for (int i = 0; i < quantity; i++) {
+            repository.save(createEmployee("name", "country", "email"));
+        }
     }
+
+    @Override
+    public void updateByCountry(String country) {
+        List<Employee> employees = repository.findAll();
+        for (Employee employee : employees) {
+            employee.setCountry(country);
+            repository.save(employee);
+        }
+    }
+    @Override
+    @Transactional
+    public void cleverUpdateByCountry(String oldCountry, String newCountry) {
+        List<Employee> employees = repository.findAll();
+        for (Employee employee : employees)
+            if (employee.getCountry().equals(oldCountry)) {
+                employee.setCountry(newCountry);
+                repository.save(employee);
+            }
+    }
+    public String randomCountry() {
+        List<String> countries = countryGenerator();
+        int randomIndex = (int) (Math.random() * countries.size());
+        return countries.get(randomIndex);
+    }
+    public static List<String> countryGenerator() {
+        return Arrays.asList("USA", "Ukraine", "Poland", "Canada", "France", "Germany", "UK", "Japan", "Italy", "India");
+    }
+
+    @Override
+    public Employee createEmployee(String name, String country, String email) {
+        return new Employee(name, country, email);
+    }
+
+
+    public void senderEmails(List<String> emails, String text) {
+
+//        log.info("Sending emails to: " + emails);
+    }
+
 
 }

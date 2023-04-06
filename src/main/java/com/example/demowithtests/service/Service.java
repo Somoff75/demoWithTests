@@ -6,6 +6,7 @@ import java.util.List;
 
 public interface Service {
 
+
     Employee create(Employee employee);
 
     List<Employee> getAll();
@@ -17,6 +18,16 @@ public interface Service {
     void removeById(Integer id);
 
     void removeAll();
+
+
+    void fillDatabase(String quantity);
+
+    void updateByCountry(String country);
+
+
+    void cleverUpdateByCountry(String oldCountry, String newCountry);
+
+    Employee createEmployee(String name, String country, String email);
 
     List<Employee> processor();
 

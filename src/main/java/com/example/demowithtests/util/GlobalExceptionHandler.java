@@ -1,6 +1,6 @@
 package com.example.demowithtests.util;
 
-import lombok.AllArgsConstructor;
+//import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -60,8 +60,13 @@ public class GlobalExceptionHandler {
     }
 
     @Data
-    @AllArgsConstructor
+//    @AllArgsConstructor
     private static class MyGlobalExceptionHandler {
         private String message;
+        public MyGlobalExceptionHandler(String message) {
+            this.message = message;
+        }
     }
+
+
 }

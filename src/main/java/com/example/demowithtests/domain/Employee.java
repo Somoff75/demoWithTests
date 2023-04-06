@@ -13,21 +13,27 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+
 public class Employee {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-
     private String name;
     private String country;
     private String email;
     private Boolean isDeleted = Boolean.FALSE;
 
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "employee_id")
     private Set<Address> addresses = new HashSet<>();
 
+    public Employee(String name, String country, String email) {
+        this.name = name;
+        this.country = country;
+        this.email = email;
+
+    }
 
     public Boolean getIsDeleted() {
         return isDeleted;
@@ -70,13 +76,6 @@ public class Employee {
     }
 
 
-    public void setAddresses(Set<Address> addresses){
-        this.addresses = addresses;
-    }
-    public Set<Address> getAddresses(){
-        return addresses;
-    }
-
     @Override
     public String toString() {
         return "Employee{" +
@@ -85,6 +84,7 @@ public class Employee {
                 ", country='" + country + '\'' +
                 ", email='" + email + '\'' +
                 ", isDeleted=" + isDeleted +
+                ", addresses=" + addresses +
                 '}';
     }
 }
