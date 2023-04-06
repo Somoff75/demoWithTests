@@ -3,19 +3,21 @@ package com.example.demowithtests.service;
 import com.example.demowithtests.domain.Employee;
 import com.example.demowithtests.repository.Repository;
 import com.example.demowithtests.util.*;
-import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Logger;
 
-@AllArgsConstructor
-//@Slf4j
+//@AllArgsConstructor
+@Slf4j
 @org.springframework.stereotype.Service
 public class ServiceBean implements Service {
 
     private final Repository repository;
-    private static final Logger log = Logger.getLogger(ServiceBean.class.getName());
+
+    public ServiceBean(Repository repository) {
+        this.repository = repository;
+    }
 
     @Override
     public Employee create(Employee employee) {
@@ -23,7 +25,7 @@ public class ServiceBean implements Service {
 
             throw new InvalidEmployeeException();
         }
-        log.info("create() - end: employee = {}" + employee);
+//        log.info("create() - end: employee = {}" + employee);
 
         return repository.save(employee);
     }
@@ -40,7 +42,7 @@ public class ServiceBean implements Service {
 
     @Override
     public Employee getById(Integer id) {
-        var employee = repository.findById(id).orElseThrow(IdEmployeeNotFoundException::new);
+        Employee employee = repository.findById(id).orElseThrow(IdEmployeeNotFoundException::new);
 
         if (employee.getIsDeleted()) {
             throw new DeletedEmployeeException();
@@ -95,14 +97,14 @@ public class ServiceBean implements Service {
 
     @Override
     public List<Employee> processor() {
-        log.info("replace null  - start");
+//        log.info("replace null  - start");
         List<Employee> replaceNull = repository.findAllByIsDeletedNull();
-        log.info("replace null after replace: " + replaceNull);
+//        log.info("replace null after replace: " + replaceNull);
         for (Employee emp : replaceNull) {
             emp.setIsDeleted(Boolean.FALSE);
         }
-        log.info("replaceNull = {} ");
-        log.info("replace null  - end:");
+//        log.info("replaceNull = {} ");
+//        log.info("replace null  - end:");
         repository.saveAll(replaceNull);
         return replaceNull;
     }
@@ -131,7 +133,7 @@ public class ServiceBean implements Service {
     }
 
     public void senderEmails(List<String> emails, String text) {
-        log.info("Sending emails to: " + emails);
+//        log.info("Sending emails to: " + emails);
     }
 
 }
