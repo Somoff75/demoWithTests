@@ -19,6 +19,12 @@ public class Controller {
 
     }
 
+    public Controller(Service service) {
+        this.service = service;
+
+    }
+
+
     //Операция сохранения юзера в базу данных
     @PostMapping("/users")
     @ResponseStatus(HttpStatus.CREATED)
