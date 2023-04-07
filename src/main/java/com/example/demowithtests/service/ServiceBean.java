@@ -20,18 +20,20 @@ public class ServiceBean implements Service {
     private final Repository repository;
 
     public ServiceBean(Repository repository) {
+
         this.repository = repository;
     }
 
 
     @Override
     public Employee create(Employee employee) {
-        if (employee.getName() == null || employee.getName().isEmpty()) {
-
+        if (employee.getName().isEmpty()) {
             throw new InvalidEmployeeException();
         }
-        return repository.save(employee);
+        Employee createdEmployee = repository.save(employee);
+        return createdEmployee;
     }
+
 
     @Override
     public List<Employee> getAll() {

@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+
 @RestController
 //@AllArgsConstructor
 @RequestMapping(value = "/api", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -30,9 +31,9 @@ public class Controller {
     @ResponseStatus(HttpStatus.CREATED)
     public EmployeeDto saveEmployee(@RequestBody EmployeeDto employeeDto) {
         Employee employee = mapper.employeeDtoToEmployee(employeeDto);
-        EmployeeDto dto = mapper.employeeToEmployeeDto(service.create(employee));
-        return dto;
+        return mapper.employeeToEmployeeDto(service.create(employee));
     }
+
     //Получение списка юзеров
     @GetMapping("/users")
     @ResponseStatus(HttpStatus.OK)
@@ -81,21 +82,22 @@ public class Controller {
     public void removeAllUsers() {
         service.removeAll();
     }
+
     @PostMapping("/sendEmailByCountry")
     @ResponseStatus(HttpStatus.OK)
-    public void sendEmailsByCountry(@RequestParam String country, @RequestParam String text){
+    public void sendEmailsByCountry(@RequestParam String country, @RequestParam String text) {
         service.sendEmailByCountry(country, text);
     }
 
     @GetMapping("/replaceNull")
     @ResponseStatus(HttpStatus.OK)
-    public void replaceNull(){
+    public void replaceNull() {
         service.processor();
     }
 
     @PostMapping("/sendEmailByCity")
     @ResponseStatus(HttpStatus.OK)
-    public void sendEmailsByCity(@RequestParam String cities, @RequestBody String text){
+    public void sendEmailsByCity(@RequestParam String cities, @RequestBody String text) {
         service.sendEmailByCity(cities, text);
     }
 }
