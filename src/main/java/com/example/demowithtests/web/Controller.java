@@ -2,19 +2,24 @@ package com.example.demowithtests.web;
 
 import com.example.demowithtests.domain.Employee;
 import com.example.demowithtests.service.Service;
-import lombok.AllArgsConstructor;
+import com.example.demowithtests.util.config.Mapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
 @RestController
-@AllArgsConstructor
+//@AllArgsConstructor
 @RequestMapping(value = "/api", produces = MediaType.APPLICATION_JSON_VALUE)
 public class Controller {
 
     private final Service service;
+    private final Mapper mapper;
+
+    public Controller(Service service, Mapper mapper) {
+        this.service = service;
+        this.mapper = mapper;
+    }
 
 
     //Операция сохранения юзера в базу данных
