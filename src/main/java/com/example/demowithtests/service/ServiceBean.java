@@ -45,8 +45,9 @@ public class ServiceBean implements Service {
     }
 
     @Override
-    public Employee getById(Integer id) {
-        Employee employee = repository.findById(id).orElseThrow(IdEmployeeNotFoundException::new);
+    public Employee getById(String id) {
+        Integer empId = Integer.parseInt(id);
+        Employee employee = repository.findById(empId).orElseThrow(IdEmployeeNotFoundException::new);
 
         if (employee.getIsDeleted()) {
             throw new DeletedEmployeeException();

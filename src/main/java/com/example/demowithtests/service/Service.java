@@ -10,7 +10,7 @@ public interface Service {
 
     List<Employee> getAll();
 
-    Employee getById(Integer id);
+    Employee getById(String id);
 
     Employee updateById(Integer id, Employee plane);
 
