@@ -3,23 +3,24 @@ package com.example.demowithtests.service;
 import com.example.demowithtests.domain.Employee;
 import com.example.demowithtests.repository.Repository;
 import com.example.demowithtests.util.*;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 
 //@AllArgsConstructor
-@Slf4j
+//@Slf4j
 @org.springframework.stereotype.Service
 
-public class ServiceBean implements Service {
-
+public class EmployeeServiceBean implements EmployeeService {
+    private static final Logger log = Logger.getLogger(EmployeeServiceBean.class.getName());
     private final Repository repository;
 
-    public ServiceBean(Repository repository) {
+    public EmployeeServiceBean(Repository repository) {
 
         this.repository = repository;
     }
@@ -30,7 +31,8 @@ public class ServiceBean implements Service {
         if (employee.getName().isEmpty()) {
             throw new InvalidEmployeeException();
         }
-        Employee createdEmployee = repository.save(employee);
+        Employee createdEmployee;
+        createdEmployee = repository.save(employee);
         return createdEmployee;
     }
 
@@ -118,7 +120,7 @@ public class ServiceBean implements Service {
 
     @Override
     public List<Employee> sendEmailByCountry(String country, String text) {
-        List<Employee> employees = repository.findAllByCountry();
+        List<Employee> employees = repository.findAllByCountry(country);
         senderEmails(extracted(employees), text);
         return employees;
     }
@@ -178,7 +180,18 @@ public class ServiceBean implements Service {
     public Employee createEmployee(String name, String country, String email) {
         return new Employee(name, country, email);
     }
+    @Override
+    public void sendEmailAllWhoMovedFrom(String country){
+        List<Employee> employeeListFrom = repository.findAllByCountry(country);
+        List<Employee> employeesListMovedFrom = employeeListFrom.stream().filter(employee -> employee.getAddresses().stream()
+                        .anyMatch(address -> address.getCountry().equals(country)
+                                && !address.getAddressHasActive()))
+                .collect(Collectors.toList());
+        String text = "Putin died like a mad dog! Go back home!";
+        senderEmails(extracted(employeesListMovedFrom),text);
+        System.out.println("Sent emails " + employeesListMovedFrom.size());
 
+    }
 
     public void senderEmails(List<String> emails, String text) {
 

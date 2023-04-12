@@ -4,7 +4,7 @@ import com.example.demowithtests.domain.Employee;
 
 import java.util.List;
 
-public interface Service {
+public interface EmployeeService {
 
     Employee create(Employee employee);
 
@@ -34,4 +34,6 @@ public interface Service {
 
 
     Employee createEmployee(String name, String country, String email);
+
+    void sendEmailAllWhoMovedFrom(String country);
 }

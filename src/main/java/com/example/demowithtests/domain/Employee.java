@@ -14,7 +14,8 @@ import java.util.Set;
 @Builder
 @Data
 public class Employee {
-
+    public Employee() {
+    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -39,8 +40,7 @@ public class Employee {
         this.email = email;
 
     }
-    public Employee() {
-    }
+
     public Employee(Integer id, String name, String country, String email, Boolean isDeleted, Set<Address> addresses, Set<Photo> photos) {
         this.id = id;
         this.name = name;
