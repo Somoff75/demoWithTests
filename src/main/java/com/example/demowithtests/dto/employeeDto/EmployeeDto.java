@@ -1,4 +1,4 @@
-package com.example.demowithtests.dto;
+package com.example.demowithtests.dto.employeeDto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 
@@ -21,12 +21,12 @@ public class EmployeeDto {
         @Schema(description = "Name of an employee.", example = "Buba", required = true)
         public String country;
 
-        @Schema(description = "Name of an employee.", example = "Buba", required = true)
+        @Schema(description = "Name of an employee.", example = "buba@gmail.com", required = true)
         public String email;
 
-        @Schema(description = "Name of an employee.", example = "Buba", required = true)
+        @Schema(description = "Addresses of an employee.", example = "Ukraine, Kyiv, Sadova", required = true)
         public Set<AddressDto> addresses = new HashSet<>();
 
-        @Schema(description = "Name of an employee.", example = "Buba", required = true)
+        @Schema(description = "Photos of an employee.", example = "http://link.com, 3,4", required = true)
         public Set<PhotoDto> photos = new HashSet<>();
 }

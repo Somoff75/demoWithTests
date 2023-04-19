@@ -55,7 +55,7 @@
 //        verify(repository).findById(employee.getId());
 //    }
 //
-//    @Test(expected = EntityNotFoundException.class)
+//    @Test(expected = ResourceNotFoundException.class)
 //    public void should_throw_exception_when_employee_doesnt_exist() {
 //        Employee employee = new Employee();
 //        employee.setId(89);

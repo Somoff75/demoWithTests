@@ -1,7 +1,7 @@
-package com.example.demowithtests.web;
+package com.example.demowithtests.web.employee;
 
-import com.example.demowithtests.dto.EmployeeDto;
-import com.example.demowithtests.dto.EmployeeReadDto;
+import com.example.demowithtests.dto.employeeDto.EmployeeDto;
+import com.example.demowithtests.dto.employeeDto.EmployeeReadDto;
 import com.example.demowithtests.util.EmployeesNotFoundException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -149,4 +149,26 @@ public interface EmployeeController {
     @PostMapping("/sendEmailAllWhoMovedFrom")
     @ResponseStatus(HttpStatus.OK)
     void sendEmailAllWhoMovedFrom(@RequestParam String country);
+
+    @Operation(summary = "This is endpoint to add passport to employee.", description = "Create request to add passport.", tags = {"Employee"})
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "SUCCESS. Passport was added to employee."),
+            @ApiResponse(responseCode = "400", description = "Invalid input."),
+            @ApiResponse(responseCode = "404", description = "NOT FOUND. DB or Table don't exist."),
+            @ApiResponse(responseCode = "500", description = "Server error.")})
+    @PatchMapping("/addPassport")
+    @ResponseStatus(HttpStatus.OK)
+    EmployeeReadDto addPassport(@RequestParam Integer employeeId, @RequestParam Integer passportId);
+
+    @Operation(summary = "This is endpoint to add passport to employee safely.", description = "Create request to add passport.", tags = {"Employee"})
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "SUCCESS. Passport was added to employee."),
+            @ApiResponse(responseCode = "400", description = "Invalid input."),
+            @ApiResponse(responseCode = "404", description = "NOT FOUND. DB or Table don't exist."),
+            @ApiResponse(responseCode = "500", description = "Server error.")})
+    @PatchMapping("users/{uid}/passports/{pid}")
+    @ResponseStatus(HttpStatus.OK)
+    EmployeeReadDto addPassportSafely(@PathVariable("uid") Integer employeeId, @PathVariable("pid") Integer passportId);
+
+
 }

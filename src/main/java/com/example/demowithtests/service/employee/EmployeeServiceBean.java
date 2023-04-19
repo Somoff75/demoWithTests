@@ -1,7 +1,9 @@
-package com.example.demowithtests.service;
+package com.example.demowithtests.service.employee;
 
 import com.example.demowithtests.domain.Employee;
-import com.example.demowithtests.repository.Repository;
+import com.example.demowithtests.domain.Passport;
+import com.example.demowithtests.repository.EmployeeRepository;
+import com.example.demowithtests.repository.PassportRepository;
 import com.example.demowithtests.util.*;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,10 +21,9 @@ import java.util.stream.Collectors;
 @org.springframework.stereotype.Service
 
 public class EmployeeServiceBean implements EmployeeService {
-//    private static final Logger log = Logger.getLogger(EmployeeServiceBean.class.getName());
-    private final Repository repository;
 
-
+    private final EmployeeRepository repository;
+    private final PassportRepository passportRepository;
 
     @Override
     public Employee create(Employee employee) {
@@ -55,9 +56,6 @@ public class EmployeeServiceBean implements EmployeeService {
         log.debug("Report --> getById() - start: id = {}", id);
         Integer empId = Integer.parseInt(id);
         Employee employee = repository.findById(empId).orElseThrow(IdEmployeeNotFoundException::new);
-        if (employee.getIsDeleted()) {
-            throw new DeletedEmployeeException();
-        }
         log.debug("Report --> getById() - is over: employee = {}", employee);
         return employee;
     }
@@ -111,6 +109,7 @@ public class EmployeeServiceBean implements EmployeeService {
 
         }
     }
+
     @Override
     public List<Employee> processor() {
         log.info("replace null  - start");
@@ -172,6 +171,7 @@ public class EmployeeServiceBean implements EmployeeService {
         }
         log.debug("Report --> updateByCountry() - is over:");
     }
+
     @Override
     @Transactional
     public void cleverUpdateByCountry(String oldCountry, String newCountry) {
@@ -184,11 +184,13 @@ public class EmployeeServiceBean implements EmployeeService {
             }
         log.debug("Report --> cleverUpdateByCountry() - is over:");
     }
+
     public String randomCountry() {
         List<String> countries = countryGenerator();
         int randomIndex = (int) (Math.random() * countries.size());
         return countries.get(randomIndex);
     }
+
     public static List<String> countryGenerator() {
         return Arrays.asList("USA", "Ukraine", "Poland", "Canada", "France", "Germany", "UK", "Japan", "Italy", "India");
     }
@@ -198,8 +200,9 @@ public class EmployeeServiceBean implements EmployeeService {
         log.debug("Report --> createEmployee() - is over:");
         return new Employee(name, country, email);
     }
+
     @Override
-    public void sendEmailAllWhoMovedFrom(String country){
+    public void sendEmailAllWhoMovedFrom(String country) {
         log.debug("Report --> sendEmailAllWhoMovedFrom() - start: country = {}", country);
         List<Employee> employeeListFrom = repository.findAllByCountry(country);
         List<Employee> employeesListMovedFrom = employeeListFrom.stream().filter(employee -> employee.getAddresses().stream()
@@ -207,11 +210,27 @@ public class EmployeeServiceBean implements EmployeeService {
                                 && !address.getAddressHasActive()))
                 .collect(Collectors.toList());
         String text = "Putin died like a mad dog! Go back home!";
-        senderEmails(extracted(employeesListMovedFrom),text);
-        log.debug("Report --> sendEmailByCity() - is over: employeeListFrom = {}", employeeListFrom );
+        senderEmails(extracted(employeesListMovedFrom), text);
+        log.debug("Report --> sendEmailByCity() - is over: employeeListFrom = {}", employeeListFrom);
         System.out.println("Sent emails " + employeesListMovedFrom.size());
 
     }
+
+    @Override
+    public Employee addPassport(Integer employeeId, Integer passportId) {
+        Employee employee = repository
+                .findById(employeeId)
+                .orElseThrow(IdEmployeeNotFoundException::new);
+        Passport passport = passportRepository
+                .findById(passportId)
+                .orElseThrow(IdEmployeeNotFoundException::new);
+        employee.setPassport(passport);
+        log.debug("employeeService addPassport() completed");
+        return repository.save(employee);
+    }
+
+
+
 
     public void senderEmails(List<String> emails, String text) {
         log.info("Sending emails to: " + emails);

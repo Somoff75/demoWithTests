@@ -1,4 +1,4 @@
-package com.example.demowithtests.service;
+package com.example.demowithtests.service.employee;
 
 import com.example.demowithtests.domain.Employee;
 
@@ -36,4 +36,8 @@ public interface EmployeeService {
     Employee createEmployee(String name, String country, String email);
 
     void sendEmailAllWhoMovedFrom(String country);
+
+    Employee addPassport(Integer employeeId, Integer passportId);
+
+
 }

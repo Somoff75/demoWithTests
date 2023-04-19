@@ -1,12 +1,13 @@
-package com.example.demowithtests.web;
+package com.example.demowithtests.web.employee;
 
 
 import com.example.demowithtests.domain.Employee;
-import com.example.demowithtests.dto.EmployeeDto;
-import com.example.demowithtests.dto.EmployeeReadDto;
-import com.example.demowithtests.service.EmployeeService;
+import com.example.demowithtests.dto.employeeDto.EmployeeDto;
+import com.example.demowithtests.dto.employeeDto.EmployeeReadDto;
+import com.example.demowithtests.service.employee.EmployeeService;
 import com.example.demowithtests.util.EmployeesNotFoundException;
-import com.example.demowithtests.util.config.Mapper;
+import com.example.demowithtests.util.mapstruct.EmployeeMapper;
+import com.example.demowithtests.util.mapstruct.PassportMapper;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,14 +26,15 @@ import java.util.List;
 public class EmployeeControllerBean implements EmployeeController {
 
     private final EmployeeService employeeService;
-    private final Mapper mapper;
+    private final EmployeeMapper employeeMapper;
+    private final PassportMapper passportMapper;
 
     @Override
     public EmployeeDto saveEmployee(@RequestBody EmployeeDto employeeDto) {
         log.info("Controller --> saveEmployee() - start: ");
-        Employee employee = mapper.employeeDtoToEmployee(employeeDto);
+        Employee employee = employeeMapper.employeeDtoToEmployee(employeeDto);
         log.info("Controller --> saveEmployee() is over, employee " + employee + " created");
-        return mapper.employeeToEmployeeDto(employeeService.create(employee));
+        return employeeMapper.employeeToEmployeeDto(employeeService.create(employee));
     }
 
     @Override
@@ -42,7 +44,7 @@ public class EmployeeControllerBean implements EmployeeController {
         List<EmployeeReadDto> employeesReadDto = new ArrayList<>();
         for (Employee employee : employees) {
             employeesReadDto.add(
-                    mapper.employeeToEmployeeReadDto(employee)
+                    employeeMapper.employeeToEmployeeReadDto(employee)
             );
         }
         log.info("Controller --> getAllUsers() - is over");
@@ -58,7 +60,7 @@ public class EmployeeControllerBean implements EmployeeController {
             throw new EntityNotFoundException("Employee not found with id " + id);
         }
         log.info("Controller --> getEmployeeById() - is over: id={}", id);
-        return mapper.employeeToEmployeeReadDto(employee);
+        return employeeMapper.employeeToEmployeeReadDto(employee);
     }
 
     @Override
@@ -66,8 +68,8 @@ public class EmployeeControllerBean implements EmployeeController {
         log.info("Controller --> refreshEmployee() - start: ");
         Integer parseId = Integer.parseInt(id);
         log.info("Controller --> refreshEmployee() - is over: id={}", id);
-        return mapper.employeeToEmployeeReadDto(
-                employeeService.updateById(parseId, mapper.employeeDtoToEmployee(employeeDto)
+        return employeeMapper.employeeToEmployeeReadDto(
+                employeeService.updateById(parseId, employeeMapper.employeeDtoToEmployee(employeeDto)
                 )
         );
     }
@@ -132,6 +134,22 @@ public class EmployeeControllerBean implements EmployeeController {
         employeeService.sendEmailAllWhoMovedFrom(country);
         log.info("Controller --> sendEmailAllWhoMovedFrom() - is over");
     }
+
+    @Override
+    public EmployeeReadDto addPassport(Integer employeeId, Integer passportId) {
+        Employee employee = employeeService.addPassport(employeeId, passportId);
+        EmployeeReadDto employeeReadDto = employeeMapper.employeeToEmployeeReadDto(employee);
+        return employeeReadDto;
+    }
+    public EmployeeReadDto addPassportSafely(Integer employeeId, Integer passportId){
+        log.info("Controller ==> addPassportSafely() - start: employeeId = {}, passportId = {}", employeeId, passportId);
+        Employee employee = employeeService.addPassport(employeeId, passportId);
+        EmployeeReadDto employeeReadDto = employeeMapper.employeeToEmployeeReadDto(employee);
+        log.info("Controller ==> addPassportSafely() - end: employee = {}", employeeReadDto);
+        return employeeReadDto;
+    }
+
+
 
     @Override
     public void replaceNull() {
