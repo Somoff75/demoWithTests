@@ -1,7 +1,7 @@
 package com.example.demowithtests.service.passport;
 
-import com.example.demowithtests.domain.Passport;
-import com.example.demowithtests.domain.Residence;
+import com.example.demowithtests.domain.passport.Passport;
+import com.example.demowithtests.domain.passport.Residence;
 
 import java.util.List;
 import java.util.UUID;

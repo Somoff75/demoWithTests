@@ -1,6 +1,6 @@
 package com.example.demowithtests.util.mapstruct;
 
-import com.example.demowithtests.domain.Employee;
+import com.example.demowithtests.domain.employee.Employee;
 import com.example.demowithtests.dto.employeeDto.EmployeeDto;
 import com.example.demowithtests.dto.employeeDto.EmployeeReadDto;
 import org.mapstruct.Mapper;

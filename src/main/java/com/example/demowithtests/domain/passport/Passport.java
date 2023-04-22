@@ -1,5 +1,6 @@
-package com.example.demowithtests.domain;
+package com.example.demowithtests.domain.passport;
 
+import com.example.demowithtests.domain.employee.Employee;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

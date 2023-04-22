@@ -1,7 +1,7 @@
 package com.example.demowithtests.util.mapstruct;
 
-import com.example.demowithtests.domain.Passport;
-import com.example.demowithtests.domain.Residence;
+import com.example.demowithtests.domain.passport.Passport;
+import com.example.demowithtests.domain.passport.Residence;
 import com.example.demowithtests.dto.passportDto.PassportRequestDto;
 import com.example.demowithtests.dto.passportDto.PassportResponseDto;
 import com.example.demowithtests.dto.passportDto.ResidenceDto;

@@ -1,9 +1,8 @@
-package com.example.demowithtests.domain;
+package com.example.demowithtests.domain.employee;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.example.demowithtests.domain.passport.Passport;
+import com.example.demowithtests.domain.workplace.Workplace;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -14,7 +13,9 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Data
+@Getter
+@Setter
+
 public class Employee {
 
     @Id
@@ -33,9 +34,13 @@ public class Employee {
     @JoinColumn(name = "employee_id")
     private Set<Photo> photos = new HashSet<>();
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER )
     @JoinColumn(name = "passport_id", referencedColumnName = "id")
     private Passport passport;
+
+    @ManyToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+    @ToString.Exclude
+    private Set<Workplace> workplaces = new HashSet<>();
 
     public Employee(String name, String country, String email, Boolean isDeleted) {
 

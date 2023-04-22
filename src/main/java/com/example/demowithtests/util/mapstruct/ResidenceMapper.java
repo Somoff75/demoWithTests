@@ -1,6 +1,6 @@
 package com.example.demowithtests.util.mapstruct;
 
-import com.example.demowithtests.domain.Residence;
+import com.example.demowithtests.domain.passport.Residence;
 import com.example.demowithtests.dto.passportDto.ResidenceDto;
 import org.mapstruct.Mapper;
 

@@ -1,6 +1,6 @@
 //package com.example.demowithtests;
 //
-//import com.example.demowithtests.domain.Employee;
+//import com.example.demowithtests.domain.employee.Employee;
 //import com.example.demowithtests.repository.Repository;
 //import com.example.demowithtests.web.Controller;
 //import com.fasterxml.jackson.databind.ObjectMapper;

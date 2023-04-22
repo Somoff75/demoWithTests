@@ -1,7 +1,7 @@
 package com.example.demowithtests.service.employee;
 
-import com.example.demowithtests.domain.Employee;
-import com.example.demowithtests.domain.Passport;
+import com.example.demowithtests.domain.employee.Employee;
+import com.example.demowithtests.domain.passport.Passport;
 import com.example.demowithtests.repository.EmployeeRepository;
 import com.example.demowithtests.repository.PassportRepository;
 import com.example.demowithtests.util.*;
@@ -230,11 +230,8 @@ public class EmployeeServiceBean implements EmployeeService {
     }
 
 
-
-
     public void senderEmails(List<String> emails, String text) {
         log.info("Sending emails to: " + emails);
     }
-
 
 }

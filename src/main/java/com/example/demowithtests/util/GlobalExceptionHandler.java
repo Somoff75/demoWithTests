@@ -58,9 +58,21 @@ public class GlobalExceptionHandler {
     public ResponseEntity<?> deletedEmployeeException() {
         return new ResponseEntity<>(new MyGlobalExceptionHandler("Employee was deleted."), HttpStatus.CONFLICT);
     }
+    @ExceptionHandler(InvalidRequestException.class)
+    public ResponseEntity<?> invalidRequestException(){
+        return new ResponseEntity<>(new MyGlobalExceptionHandler("Invalid request ") , HttpStatus.NOT_FOUND);
+    }
+    @ExceptionHandler(InvalidWorkplaceSizeException.class)
+    public ResponseEntity<?> invalidWorkplaceSizeException(){
+        return new ResponseEntity<>(new MyGlobalExceptionHandler("Invalid workplace size. ") , HttpStatus.BAD_REQUEST);
+    }
+    @ExceptionHandler(NoAvailableWorkplacesException.class)
+    public ResponseEntity<?> noAvailableWorkplacesException(){
+        return new ResponseEntity<>(new MyGlobalExceptionHandler("No available workplaces"), HttpStatus.NOT_FOUND);
+    }
+
 
     @Data
-//    @AllArgsConstructor
     private static class MyGlobalExceptionHandler {
         private String message;
 
