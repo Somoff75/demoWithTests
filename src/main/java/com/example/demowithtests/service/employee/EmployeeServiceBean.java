@@ -28,9 +28,9 @@ public class EmployeeServiceBean implements EmployeeService {
     @Override
     public Employee create(Employee employee) {
         log.debug("Report --> create() - start: employee = {}", employee);
-        if (employee.getName().isEmpty()) {
-            throw new InvalidEmployeeException();
-        }
+//        if (employee.getName().isEmpty()) {
+//            throw new InvalidEmployeeException();
+//        }
         Employee createdEmployee;
         createdEmployee = repository.save(employee);
         log.debug("Report --> create() - is over: employee = {}", createdEmployee);

@@ -53,7 +53,6 @@ public class WorkplaceControllerBean implements WorkplaceController {
 
     }
 
-
     @Override
     @PutMapping(value = "/workplace/update/{id}")
     @ResponseStatus(HttpStatus.OK)

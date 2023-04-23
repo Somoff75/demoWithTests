@@ -15,18 +15,18 @@ public class EmployeeDto {
         this.photos = photos;
     }
 
-        @Schema(description = "Name of an employee.", example = "Buba", required = true)
+        @Schema(description = "Name of an employee.", example = "Buba")
         public String name;
 
-        @Schema(description = "Name of an employee.", example = "Buba", required = true)
+        @Schema(description = "Name of an employee.", example = "USA")
         public String country;
 
-        @Schema(description = "Name of an employee.", example = "buba@gmail.com", required = true)
+        @Schema(description = "Name of an employee.", example = "buba@gmail.com")
         public String email;
 
-        @Schema(description = "Addresses of an employee.", example = "Ukraine, Kyiv, Sadova", required = true)
+        @Schema(description = "Addresses of an employee.", example = "addresses")
         public Set<AddressDto> addresses = new HashSet<>();
 
-        @Schema(description = "Photos of an employee.", example = "http://link.com, 3,4", required = true)
+        @Schema(description = "Photos of an employee.", example = "http://link.com, 3,4")
         public Set<PhotoDto> photos = new HashSet<>();
 }
