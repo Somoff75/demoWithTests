@@ -9,6 +9,9 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
+import javax.persistence.EntityNotFoundException;
+import javax.persistence.PersistenceContext;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -25,6 +28,55 @@ public class EmployeeServiceBean implements EmployeeService {
     private final EmployeeRepository repository;
     private final PassportRepository passportRepository;
 
+    @PersistenceContext
+    private EntityManager entityManager;
+
+    @Transactional
+    @Override
+    public Employee saveWithEntityManager(Employee employee) {
+        entityManager.persist(employee);
+        log.info ("Employee saved with EntityManager: {}", employee);
+        return employee;
+    }
+    @Transactional
+    @Override
+    public Employee updateEmployeeWithEntityManager(Integer id, Employee employee) {
+        Employee existingEmployee = entityManager.find(Employee.class, id);
+        if (existingEmployee == null) {
+            throw new IdEmployeeNotFoundException();
+        }
+        existingEmployee.setName(employee.getName());
+        existingEmployee.setEmail(employee.getEmail());
+        existingEmployee.setCountry(employee.getCountry());
+        Employee updatedEmployee = entityManager.merge(existingEmployee);
+        log.info(String.format("Employee with ID {} updated %d", id));
+        return updatedEmployee;
+    }
+
+    @Transactional
+    @Override
+    public void deleteWithEntityManager(Employee employee) {
+        log.info("Employee deleted with EntityManager: {}", employee);
+        entityManager.remove(employee);
+    }
+
+    @Transactional
+    @Override
+    public Employee findByIdWithEntityManager(Integer id) {
+        Employee employee = entityManager.find(Employee.class, id);
+        if (employee == null) {
+            throw new EntityNotFoundException("Employee with id " + id + " not found");
+        }
+        return employee;
+    }
+
+    @Transactional
+    @Override
+    public void detachWithEntityManager(Integer id) {
+        Employee employeeToDetach = entityManager.find(Employee.class, id);
+        entityManager.detach(employeeToDetach);
+        log.info ("Employee detached with EntityManager: {}", id);
+}
     @Override
     public Employee create(Employee employee) {
         log.debug("Report --> create() - start: employee = {}", employee);
@@ -36,7 +88,6 @@ public class EmployeeServiceBean implements EmployeeService {
         log.debug("Report --> create() - is over: employee = {}", createdEmployee);
         return createdEmployee;
     }
-
 
     @Override
     public List<Employee> getAll() {

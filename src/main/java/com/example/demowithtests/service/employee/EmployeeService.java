@@ -1,10 +1,26 @@
 package com.example.demowithtests.service.employee;
 
 import com.example.demowithtests.domain.employee.Employee;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 public interface EmployeeService {
+
+    @Transactional
+    Employee saveWithEntityManager(Employee employee);
+
+    @Transactional
+    Employee updateEmployeeWithEntityManager(Integer id, Employee employee);
+
+    @Transactional
+    void deleteWithEntityManager(Employee employee);
+
+    Employee findByIdWithEntityManager(Integer id);
+
+
+    @Transactional
+    void detachWithEntityManager(Integer id);
 
     Employee create(Employee employee);
 

@@ -131,6 +131,63 @@ public interface EmployeeController {
     @ResponseStatus(HttpStatus.OK)
     void cleverUpdateByCountry(@RequestParam String oldCountry, String newCountry);
 
+    @Operation(summary = "This endpoint creates a new employee using EntityManager.",
+            description = "Creates a new employee using EntityManager and returns the created employee.",
+            tags = {"Employee"})
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "SUCCESSFUL. The employee was created using EntityManager."),
+            @ApiResponse(responseCode = "404", description = "NOT FOUND. The database was not found."),
+            @ApiResponse(responseCode = "500", description = "UNEXPECTED SERVER ERROR. An unexpected error occurred on the server.")
+    })
+    @PostMapping("/saveEntity")
+    @ResponseStatus(HttpStatus.CREATED)
+    EmployeeReadDto saveEntity(@RequestBody EmployeeDto employeeDto);
+
+    @Operation(summary = "This endpoint updates an employee using EntityManager.",
+            description = "Updates an existing employee using EntityManager and returns the updated employee.",
+            tags = {"Employee"})
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "SUCCESSFUL. The employee was updated using EntityManager."),
+            @ApiResponse(responseCode = "404", description = "NOT FOUND. The employee with the given ID was not found."),
+            @ApiResponse(responseCode = "500", description = "UNEXPECTED SERVER ERROR. An unexpected error occurred on the server.")
+    })
+    @PutMapping("/updateEntity/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    EmployeeReadDto updateEntity(@PathVariable Integer id, @RequestBody EmployeeDto employeeDto);
+
+    @Operation(summary = "This endpoint deletes an employee using EntityManager.",
+            description = "Deletes an existing employee with the given ID using EntityManager.",
+            tags = {"Employee"})
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204", description = "SUCCESSFUL. The employee was deleted using EntityManager."),
+            @ApiResponse(responseCode = "404", description = "NOT FOUND. The employee with the given ID was not found."),
+            @ApiResponse(responseCode = "500", description = "UNEXPECTED SERVER ERROR. An unexpected error occurred on the server.")
+    })
+    @DeleteMapping("/deleteEntity/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    void deleteEntity(@PathVariable("id") Integer id);
+
+    @Operation(summary = "This endpoint detaches an employee entity from the persistence context.",
+            description = "Detaches the given employee entity from the persistence context.",
+            tags = {"Employee"})
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "SUCCESS. The employee entity was successfully detached from the persistence context."),
+            @ApiResponse(responseCode = "404", description = "NOT FOUND. The employee entity was not found."),
+            @ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR. An unexpected error occurred on the server.")
+    })
+    @DeleteMapping("/detachEntity/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    void detachEntity(@PathVariable ("id") Integer id);
+
+    @Operation(summary = "Get employee by ID", description = "Get employee details by their ID")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successfully retrieved employee details"),
+            @ApiResponse(responseCode = "404", description = "Employee not found"),
+            @ApiResponse(responseCode = "500", description = "Internal server error")})
+    @GetMapping("/findEntityById/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    EmployeeReadDto findEntityById(@PathVariable("id") Integer id);
+
 
     @Operation(summary = "This is endpoint to updating database by replacing nulls.", description = "Create request to update database by replacing nulls.", tags = {"Employee"})
     @ApiResponses(value = {

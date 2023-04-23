@@ -7,7 +7,6 @@ import com.example.demowithtests.dto.employeeDto.EmployeeReadDto;
 import com.example.demowithtests.service.employee.EmployeeService;
 import com.example.demowithtests.util.EmployeesNotFoundException;
 import com.example.demowithtests.util.mapstruct.EmployeeMapper;
-import com.example.demowithtests.util.mapstruct.PassportMapper;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,6 +14,7 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.EntityNotFoundException;
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,11 +23,13 @@ import java.util.List;
 @RestController
 @RequestMapping(value = "/api", produces = MediaType.APPLICATION_JSON_VALUE)
 @Tag(name = "Employee", description = "Employee API")
+
+
 public class EmployeeControllerBean implements EmployeeController {
 
     private final EmployeeService employeeService;
     private final EmployeeMapper employeeMapper;
-    private final PassportMapper passportMapper;
+
 
     @Override
     public EmployeeDto saveEmployee(@RequestBody EmployeeDto employeeDto) {
@@ -73,6 +75,7 @@ public class EmployeeControllerBean implements EmployeeController {
                 )
         );
     }
+
     @Override
     public void removeEmployeeById(@PathVariable String id) {
         log.info("Controller --> removeEmployeeById() - start: ");
@@ -141,7 +144,8 @@ public class EmployeeControllerBean implements EmployeeController {
         EmployeeReadDto employeeReadDto = employeeMapper.employeeToEmployeeReadDto(employee);
         return employeeReadDto;
     }
-    public EmployeeReadDto addPassportSafely(Integer employeeId, Integer passportId){
+
+    public EmployeeReadDto addPassportSafely(Integer employeeId, Integer passportId) {
         log.info("Controller ==> addPassportSafely() - start: employeeId = {}, passportId = {}", employeeId, passportId);
         Employee employee = employeeService.addPassport(employeeId, passportId);
         EmployeeReadDto employeeReadDto = employeeMapper.employeeToEmployeeReadDto(employee);
@@ -149,7 +153,57 @@ public class EmployeeControllerBean implements EmployeeController {
         return employeeReadDto;
     }
 
+    @Override
+    public EmployeeReadDto saveEntity(EmployeeDto employeeDto) {
+        log.info("saveEntity() started");
+        Employee employee = employeeMapper.employeeDtoToEmployee(employeeDto);
+        Employee savedEmployee = employeeService.saveWithEntityManager(employee);
+        EmployeeReadDto employeeReadDto = employeeMapper.employeeToEmployeeReadDto(savedEmployee);
+        log.info("saveEntity() completed, employee with name {} created", employeeReadDto.getClass());
+        return employeeReadDto;
+    }
+    @Override
+    public EmployeeReadDto updateEntity(Integer id, EmployeeDto employeeDto) {
+        log.info("updateEntity() started for id {}", id);
+        EmployeeReadDto employeeReadDto = employeeMapper.employeeToEmployeeReadDto(
+                employeeService.updateEmployeeWithEntityManager(id, employeeMapper.employeeDtoToEmployee(employeeDto)));
 
+        return employeeReadDto;
+    }
+    @Override
+    @Transactional
+    public void deleteEntity(Integer id) {
+        log.info("deleteEntity() started for id {}", id);
+        Employee employeeToDelete = employeeService.findByIdWithEntityManager(id);
+        if (employeeToDelete == null) {
+            throw new EntityNotFoundException("Employee with id " + id + " not found");
+        }
+        employeeService.deleteWithEntityManager(employeeToDelete);
+        log.info("deleteEntity() completed, employee with id {} deleted", id);
+    }
+    @Override
+    public void detachEntity(Integer id) {
+        Employee employee = employeeService.findByIdWithEntityManager(id);
+        if (employee == null) {
+            throw new EntityNotFoundException("Employee with id " + id + " not found");
+        }
+        employeeService.detachWithEntityManager(id);
+        log.info("Employee with ID {} detached with entity manager", id);
+    }
+
+    @Override
+    public EmployeeReadDto findEntityById(Integer id) {
+        log.info("findEntityById() started for id {}", id);
+        Employee employee = employeeService.findByIdWithEntityManager(id);
+        if (employee != null) {
+            EmployeeReadDto employeeReadDto = employeeMapper.employeeToEmployeeReadDto(employee);
+            log.info("findEntityById() completed, employee with id {} found", id);
+            return employeeReadDto;
+        } else {
+            log.warn("findEntityById() failed, employee with id {} not found", id);
+            throw new EntityNotFoundException("Employee with id " + id + " not found");
+        }
+    }
 
     @Override
     public void replaceNull() {
