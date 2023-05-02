@@ -6,6 +6,8 @@ import java.time.Instant;
 import java.util.Date;
 
 public class AddressDto {
+
+    public Long id;
     @Schema(description = "Name of an employee.", example = "Buba", required = true)
     public Boolean addressHasActive = Boolean.TRUE;
 

@@ -7,7 +7,9 @@ import java.util.Set;
 
 
 public class EmployeeDto {
-    public EmployeeDto(String name, String country, String email, Set<AddressDto> addresses, Set<PhotoDto> photos) {
+    public Integer id;
+
+    public EmployeeDto() {
         this.name = name;
         this.country = country;
         this.email = email;

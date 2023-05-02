@@ -42,20 +42,19 @@ public class Employee {
     @ToString.Exclude
     private Set<Workplace> workplaces = new HashSet<>();
 
-    public Employee(String name, String country, String email, Boolean isDeleted) {
 
+    public Employee(String name, String country, String email, Boolean isDeleted) {
         this.name = name;
         this.country = country;
         this.email = email;
         this.isDeleted = isDeleted;
-
     }
-    public Employee(String name, String country, String email) {
 
+    public Employee(String name, String country, String email) {
         this.name = name;
         this.country = country;
         this.email = email;
-
     }
+
 
 }

@@ -12,7 +12,6 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
-
 import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
@@ -24,20 +23,19 @@ import java.util.List;
 @RequestMapping(value = "/api", produces = MediaType.APPLICATION_JSON_VALUE)
 @Tag(name = "Employee", description = "Employee API")
 
-
 public class EmployeeControllerBean implements EmployeeController {
 
     private final EmployeeService employeeService;
     private final EmployeeMapper employeeMapper;
 
 
-    @Override
-    public EmployeeDto saveEmployee(@RequestBody EmployeeDto employeeDto) {
-        log.info("Controller --> saveEmployee() - start: ");
-        Employee employee = employeeMapper.employeeDtoToEmployee(employeeDto);
-        log.info("Controller --> saveEmployee() is over, employee " + employee + " created");
-        return employeeMapper.employeeToEmployeeDto(employeeService.create(employee));
-    }
+        @Override
+        public EmployeeDto saveEmployee(EmployeeDto employeeDto) {
+            log.info("Controller --> saveEmployee() - start: ");
+            Employee employee = employeeMapper.employeeDtoToEmployee(employeeDto);
+            log.info("Controller --> saveEmployee() is over, employee " + employee + " created");
+            return employeeMapper.employeeToEmployeeDto(employeeService.create(employee));
+        }
 
     @Override
     public List<EmployeeReadDto> getAllUsers() {
@@ -54,7 +52,7 @@ public class EmployeeControllerBean implements EmployeeController {
     }
 
     @Override
-    public EmployeeReadDto getEmployeeById(@PathVariable String id) {
+    public EmployeeReadDto getEmployeeById(Integer id) {
         log.info("Controller --> getEmployeeById() - start: id={}", id);
         Employee employee = employeeService.getById(id);
         if (employee == null) {
@@ -66,7 +64,7 @@ public class EmployeeControllerBean implements EmployeeController {
     }
 
     @Override
-    public EmployeeReadDto refreshEmployee(@PathVariable("id") String id, @RequestBody EmployeeDto employeeDto) throws EmployeesNotFoundException {
+    public EmployeeReadDto refreshEmployee(String id, @RequestBody EmployeeDto employeeDto) throws EmployeesNotFoundException {
         log.info("Controller --> refreshEmployee() - start: ");
         Integer parseId = Integer.parseInt(id);
         log.info("Controller --> refreshEmployee() - is over: id={}", id);

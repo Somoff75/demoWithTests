@@ -9,6 +9,8 @@ import org.mapstruct.Mapping;
 @Mapper(componentModel = "spring")
 public interface EmployeeMapper {
 
+
+
     @Mapping(target = "name", source = "employeeDto.name")
     @Mapping(target = "country", source = "employeeDto.country")
     @Mapping(target = "email", source = "employeeDto.email")
@@ -29,4 +31,5 @@ public interface EmployeeMapper {
     @Mapping(target = "name", source = "employeeReadDto.name")
     @Mapping(target = "email", source = "employeeReadDto.email")
     Employee employeeReadDtoToEmployee(EmployeeReadDto employeeReadDto);
+
 }

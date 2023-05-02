@@ -20,7 +20,6 @@ import java.util.stream.Collectors;
 
 @AllArgsConstructor
 @Slf4j
-
 @org.springframework.stereotype.Service
 
 public class EmployeeServiceBean implements EmployeeService {
@@ -35,9 +34,10 @@ public class EmployeeServiceBean implements EmployeeService {
     @Override
     public Employee saveWithEntityManager(Employee employee) {
         entityManager.persist(employee);
-        log.info ("Employee saved with EntityManager: {}", employee);
+        log.info("Employee saved with EntityManager: {}", employee);
         return employee;
     }
+
     @Transactional
     @Override
     public Employee updateEmployeeWithEntityManager(Integer id, Employee employee) {
@@ -75,14 +75,12 @@ public class EmployeeServiceBean implements EmployeeService {
     public void detachWithEntityManager(Integer id) {
         Employee employeeToDetach = entityManager.find(Employee.class, id);
         entityManager.detach(employeeToDetach);
-        log.info ("Employee detached with EntityManager: {}", id);
-}
+        log.info("Employee detached with EntityManager: {}", id);
+    }
+
     @Override
     public Employee create(Employee employee) {
         log.debug("Report --> create() - start: employee = {}", employee);
-//        if (employee.getName().isEmpty()) {
-//            throw new InvalidEmployeeException();
-//        }
         Employee createdEmployee;
         createdEmployee = repository.save(employee);
         log.debug("Report --> create() - is over: employee = {}", createdEmployee);
@@ -103,11 +101,14 @@ public class EmployeeServiceBean implements EmployeeService {
     }
 
     @Override
-    public Employee getById(String id) {
-        log.debug("Report --> getById() - start: id = {}", id);
-        Integer empId = Integer.parseInt(id);
-        Employee employee = repository.findById(empId).orElseThrow(IdEmployeeNotFoundException::new);
-        log.debug("Report --> getById() - is over: employee = {}", employee);
+    public Employee getById(Integer id) {
+        log.debug("Service --> getById() - start: id = {}", id);
+        var employee = repository.findById(id)
+                .orElseThrow(ResourceNotFoundException::new);
+        if (employee.getIsDeleted()) {
+            throw new EntityNotFoundException("Employee was deleted with id = " + id);
+        }
+        log.debug("Service --> getById() - end: employee = {}", employee);
         return employee;
     }
 
@@ -135,7 +136,7 @@ public class EmployeeServiceBean implements EmployeeService {
     @Override
     public void removeById(Integer id) {
         log.debug("Report --> removeById() - start: id = {}", id);
-        try {
+
             Employee employee = repository.findById(id)
                     .orElseThrow(IdEmployeeNotFoundException::new);
             if (employee.getIsDeleted()) {
@@ -144,9 +145,7 @@ public class EmployeeServiceBean implements EmployeeService {
             employee.setIsDeleted(true);
             log.debug("Report --> removeById() - is over: deleted employee = {}", employee);
             repository.save(employee);
-        } catch (Exception e) {
-            throw new DatabaseAccessException();
-        }
+
     }
 
     @Override
@@ -236,6 +235,12 @@ public class EmployeeServiceBean implements EmployeeService {
         log.debug("Report --> cleverUpdateByCountry() - is over:");
     }
 
+    @Override
+    public Employee createEmployee(String name, String country, String email) {
+        log.debug("Report --> createEmployee() - is over:");
+        return new Employee();
+    }
+
     public String randomCountry() {
         List<String> countries = countryGenerator();
         int randomIndex = (int) (Math.random() * countries.size());
@@ -246,11 +251,6 @@ public class EmployeeServiceBean implements EmployeeService {
         return Arrays.asList("USA", "Ukraine", "Poland", "Canada", "France", "Germany", "UK", "Japan", "Italy", "India");
     }
 
-    @Override
-    public Employee createEmployee(String name, String country, String email) {
-        log.debug("Report --> createEmployee() - is over:");
-        return new Employee(name, country, email);
-    }
 
     @Override
     public void sendEmailAllWhoMovedFrom(String country) {
