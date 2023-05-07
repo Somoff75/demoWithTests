@@ -1,6 +1,6 @@
-package com.example.demowithtests;
+package com.example.employeescontrolsystems;
 
-import com.example.demowithtests.web.employee.EmployeeControllerBean;
+import com.example.employeescontrolsystems.web.employee.EmployeeControllerBean;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

@@ -1,7 +1,7 @@
-package com.example.demowithtests;
+package com.example.employeescontrolsystems;
 
-import com.example.demowithtests.domain.employee.Employee;
-import com.example.demowithtests.repository.EmployeeRepository;
+import com.example.employeescontrolsystems.domain.employee.Employee;
+import com.example.employeescontrolsystems.repository.EmployeeRepository;
 import org.assertj.core.api.Assertions;
 import org.junit.Ignore;
 import org.junit.jupiter.api.MethodOrderer;

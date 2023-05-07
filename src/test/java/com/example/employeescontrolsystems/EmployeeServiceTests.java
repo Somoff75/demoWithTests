@@ -1,12 +1,12 @@
-package com.example.demowithtests;
+package com.example.employeescontrolsystems;
 
-import com.example.demowithtests.domain.employee.Employee;
-import com.example.demowithtests.domain.passport.Passport;
-import com.example.demowithtests.repository.EmployeeRepository;
-import com.example.demowithtests.repository.PassportRepository;
-import com.example.demowithtests.service.employee.EmployeeServiceBean;
-import com.example.demowithtests.util.IdEmployeeNotFoundException;
-import com.example.demowithtests.util.ResourceNotFoundException;
+import com.example.employeescontrolsystems.domain.employee.Employee;
+import com.example.employeescontrolsystems.domain.passport.Passport;
+import com.example.employeescontrolsystems.repository.EmployeeRepository;
+import com.example.employeescontrolsystems.repository.PassportRepository;
+import com.example.employeescontrolsystems.service.employee.EmployeeServiceBean;
+import com.example.employeescontrolsystems.util.IdEmployeeNotFoundException;
+import com.example.employeescontrolsystems.util.ResourceNotFoundException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

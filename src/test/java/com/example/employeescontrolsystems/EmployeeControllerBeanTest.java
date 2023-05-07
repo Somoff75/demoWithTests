@@ -1,12 +1,12 @@
-package com.example.demowithtests;
+package com.example.employeescontrolsystems;
 
-import com.example.demowithtests.domain.employee.Employee;
-import com.example.demowithtests.dto.employeeDto.EmployeeDto;
-import com.example.demowithtests.dto.employeeDto.EmployeeReadDto;
-import com.example.demowithtests.service.employee.EmployeeService;
-import com.example.demowithtests.util.EmployeesNotFoundException;
-import com.example.demowithtests.util.mapstruct.EmployeeMapper;
-import com.example.demowithtests.web.employee.EmployeeControllerBean;
+import com.example.employeescontrolsystems.domain.employee.Employee;
+import com.example.employeescontrolsystems.dto.employeeDto.EmployeeDto;
+import com.example.employeescontrolsystems.dto.employeeDto.EmployeeReadDto;
+import com.example.employeescontrolsystems.service.employee.EmployeeService;
+import com.example.employeescontrolsystems.util.EmployeesNotFoundException;
+import com.example.employeescontrolsystems.util.mapstruct.EmployeeMapper;
+import com.example.employeescontrolsystems.web.employee.EmployeeControllerBean;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
