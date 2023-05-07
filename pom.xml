@@ -100,17 +100,17 @@
             <scope>test</scope>
         </dependency>
         <!-- orika -->
-        <dependency>
-            <groupId>dev.akkinoc.spring.boot</groupId>
-            <artifactId>orika-spring-boot-starter</artifactId>
-            <version>2.3.3</version>
-        </dependency>
-        <dependency>
-            <groupId>ma.glasnost.orika</groupId>
-            <artifactId>orika-core</artifactId>
-            <version>1.5.4</version>
-            <scope>compile</scope>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>dev.akkinoc.spring.boot</groupId>-->
+<!--            <artifactId>orika-spring-boot-starter</artifactId>-->
+<!--            <version>2.3.3</version>-->
+<!--        </dependency>-->
+<!--        <dependency>-->
+<!--            <groupId>ma.glasnost.orika</groupId>-->
+<!--            <artifactId>orika-core</artifactId>-->
+<!--            <version>1.5.4</version>-->
+<!--            <scope>compile</scope>-->
+<!--        </dependency>-->
         <!-- swagger -->
         <dependency>
             <groupId>org.springdoc</groupId>
@@ -153,7 +153,7 @@
             <plugin>
                 <groupId>org.flywaydb</groupId>
                 <artifactId>flyway-maven-plugin</artifactId>
-                <version>8.4.1</version>
+                <version>9.3.1</version>
             </plugin>
         </plugins>
     </build>
