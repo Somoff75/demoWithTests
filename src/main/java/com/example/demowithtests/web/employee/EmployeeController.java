@@ -1,0 +1,232 @@
+package com.example.demowithtests.web.employee;
+
+import com.example.demowithtests.dto.employeeDto.EmployeeDto;
+import com.example.demowithtests.dto.employeeDto.EmployeeReadDto;
+import com.example.demowithtests.util.EmployeesNotFoundException;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+public interface EmployeeController {
+    @Operation(summary = "This is endpoint to add a new employee.", description = "Create request to add a new employee.", tags = {"Employee"})
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "CREATED. The new employee is successfully created and added to database."),
+            @ApiResponse(responseCode = "400", description = "Invalid input"),
+            @ApiResponse(responseCode = "404", description = "NOT FOUND. Specified employee request not found."),
+            @ApiResponse(responseCode = "409", description = "Employee already exists")})
+    @PostMapping("/users")
+    @ResponseStatus(HttpStatus.CREATED)
+    EmployeeDto saveEmployee(@RequestBody EmployeeDto employeeDto);
+
+
+    @Operation(summary = "This is endpoint to get a list of all users.", description = "Create request to get a list of all users.", tags = {"Employee"})
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "SUCCESSFULLY. The list of users has been successfully received."),
+            @ApiResponse(responseCode = "404", description = "NOT FOUND. Database wasn't found."),
+            @ApiResponse(responseCode = "500", description = "Unexpectable server error")})
+    @GetMapping("/users")
+    @ResponseStatus(HttpStatus.OK)
+    List<EmployeeReadDto> getAllUsers();
+
+
+    @Operation(summary = "This is endpoint to get an user by ID.", description = "Create request to get a user by Id.", tags = {"Employee"})
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "SUCCESSFULLY. The user has been successfully received."),
+            @ApiResponse(responseCode = "404", description = "NOT FOUND. The user with this ID wasnt found."),
+            @ApiResponse(responseCode = "400", description = "You put wrong data, please, it should be a number"),
+            @ApiResponse(responseCode = "500", description = "Unexpectable server error")})
+    @GetMapping(value = "/users/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    EmployeeReadDto getEmployeeById(@PathVariable Integer id);
+
+
+
+    @Operation(summary = "This is endpoint to renew some information about user.", description = "Create request to renew information about user.", tags = {"Employee"})
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "SUCCESSFULLY. The user has been successfully updated."),
+            @ApiResponse(responseCode = "404", description = "NOT FOUND. The user with this ID wasn't found."),
+            @ApiResponse(responseCode = "400", description = "You put wrong data."),
+            @ApiResponse(responseCode = "500", description = "Unexpectable server error")})
+    @PutMapping("/users/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    EmployeeReadDto refreshEmployee(@PathVariable("id") String id, @RequestBody EmployeeDto employeeDto) throws EmployeesNotFoundException;
+
+
+    @Operation(summary = "This is endpoint to remove the user by ID.", description = "Create request to remove the user.", tags = {"Employee"})
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "SUCCESSFULLY. The user has been successfully deleted."),
+            @ApiResponse(responseCode = "404", description = "NOT FOUND. The user with this ID wasn't found."),
+            @ApiResponse(responseCode = "400", description = "You put wrong data, it should be a number."),
+            @ApiResponse(responseCode = "500", description = "Unexpectable server error")})
+    @PatchMapping("/users/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    void removeEmployeeById(@PathVariable String id);
+
+
+    @Operation(summary = "This is endpoint to remove all users from database.", description = "Create request to remove all users from database.", tags = {"Employee"})
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204", description = "SUCCESSFULLY. The users have been successfully deleted."),
+            @ApiResponse(responseCode = "404", description = "NOT FOUND. The database wasn't found."),
+            @ApiResponse(responseCode = "401", description = "You should be authorized."),
+            @ApiResponse(responseCode = "500", description = "Unexpectable server error")})
+    @DeleteMapping("/users")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    void removeAllUsers();
+
+
+    @Operation(summary = "This is endpoint to sending emails for all users from country you need.", description = "Create request to send emails for users from country you need.", tags = {"Employee"})
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "SUCCESSFULLY. The users successfully recieved emails."),
+            @ApiResponse(responseCode = "404", description = "NOT FOUND. The database wasn't found."),
+            @ApiResponse(responseCode = "500", description = "Unexpectable server error")})
+    @PostMapping("/sendEmailByCountry")
+    @ResponseStatus(HttpStatus.OK)
+    void sendEmailByCountry(@RequestParam String country, @RequestParam String text);
+
+
+    @Operation(summary = "This is endpoint to sending emails for all users from city you need.", description = "Create request to send emails for users from city you need.", tags = {"Employee"})
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "SUCCESSFULLY. The users successfully recieved emails."),
+            @ApiResponse(responseCode = "404", description = "NOT FOUND. The database wasn't found."),
+            @ApiResponse(responseCode = "500", description = "Unexpectable server error")})
+    @PostMapping("/sendEmailByCity")
+    @ResponseStatus(HttpStatus.OK)
+    void sendEmailByCity(@RequestParam String cities, @RequestBody String text);
+
+
+    @Operation(summary = "This is endpoint to filling database by so much basic users as you wish.", description = "Create request to filling database by basic users.", tags = {"Employee"})
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "SUCCESSFULLY. The database has been filling."),
+            @ApiResponse(responseCode = "404", description = "NOT FOUND. The database wasn't found."),
+            @ApiResponse(responseCode = "400", description = "You put wrong data, it should be a number."),
+            @ApiResponse(responseCode = "500", description = "Unexpectable server error")})
+    @PostMapping("/fillingDatabase/{quantity}")
+    @ResponseStatus(HttpStatus.OK)
+    void fillingDatabase(@PathVariable String quantity);
+
+
+    void fillDatabase(@PathVariable String quantity);
+
+    @Operation(summary = "This is endpoint to long updating of users parameter country.", description = "Create request to long updating for users parameter country.", tags = {"Employee"})
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "SUCCESSFULLY. The database has been updated."),
+            @ApiResponse(responseCode = "404", description = "NOT FOUND. The database wasn't found."),
+            @ApiResponse(responseCode = "400", description = "You put wrong data, it should be list of countries in text."),
+            @ApiResponse(responseCode = "500", description = "Unexpectable server error")})
+    @PostMapping("/updateByCountry")
+    @ResponseStatus(HttpStatus.OK)
+    void updateByCountry(@RequestParam String countries);
+
+
+    @Operation(summary = "This is endpoint to fast updating of users parameter country.", description = "Create request to fast updating for users parameter country.", tags = {"Employee"})
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "SUCCESSFULLY. The database has been updated."),
+            @ApiResponse(responseCode = "404", description = "NOT FOUND. The database wasn't found."),
+            @ApiResponse(responseCode = "400", description = "You put wrong data, it should be list of countries in text."),
+            @ApiResponse(responseCode = "500", description = "Unexpectable server error")})
+    @PostMapping("/cleverUpdateByCountry")
+    @ResponseStatus(HttpStatus.OK)
+    void cleverUpdateByCountry(@RequestParam String oldCountry, String newCountry);
+
+    @Operation(summary = "This endpoint creates a new employee using EntityManager.",
+            description = "Creates a new employee using EntityManager and returns the created employee.",
+            tags = {"Employee"})
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "SUCCESSFUL. The employee was created using EntityManager."),
+            @ApiResponse(responseCode = "404", description = "NOT FOUND. The database was not found."),
+            @ApiResponse(responseCode = "500", description = "UNEXPECTED SERVER ERROR. An unexpected error occurred on the server.")
+    })
+    @PostMapping("/saveEntity")
+    @ResponseStatus(HttpStatus.CREATED)
+    EmployeeReadDto saveEntity(@RequestBody EmployeeDto employeeDto);
+
+    @Operation(summary = "This endpoint updates an employee using EntityManager.",
+            description = "Updates an existing employee using EntityManager and returns the updated employee.",
+            tags = {"Employee"})
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "SUCCESSFUL. The employee was updated using EntityManager."),
+            @ApiResponse(responseCode = "404", description = "NOT FOUND. The employee with the given ID was not found."),
+            @ApiResponse(responseCode = "500", description = "UNEXPECTED SERVER ERROR. An unexpected error occurred on the server.")
+    })
+    @PutMapping("/updateEntity/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    EmployeeReadDto updateEntity(@PathVariable Integer id, @RequestBody EmployeeDto employeeDto);
+
+    @Operation(summary = "This endpoint deletes an employee using EntityManager.",
+            description = "Deletes an existing employee with the given ID using EntityManager.",
+            tags = {"Employee"})
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204", description = "SUCCESSFUL. The employee was deleted using EntityManager."),
+            @ApiResponse(responseCode = "404", description = "NOT FOUND. The employee with the given ID was not found."),
+            @ApiResponse(responseCode = "500", description = "UNEXPECTED SERVER ERROR. An unexpected error occurred on the server.")
+    })
+    @DeleteMapping("/deleteEntity/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    void deleteEntity(@PathVariable("id") Integer id);
+
+    @Operation(summary = "This endpoint detaches an employee entity from the persistence context.",
+            description = "Detaches the given employee entity from the persistence context.",
+            tags = {"Employee"})
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "SUCCESS. The employee entity was successfully detached from the persistence context."),
+            @ApiResponse(responseCode = "404", description = "NOT FOUND. The employee entity was not found."),
+            @ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR. An unexpected error occurred on the server.")
+    })
+    @DeleteMapping("/detachEntity/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    void detachEntity(@PathVariable ("id") Integer id);
+
+    @Operation(summary = "Get employee by ID", description = "Get employee details by their ID")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successfully retrieved employee details"),
+            @ApiResponse(responseCode = "404", description = "Employee not found"),
+            @ApiResponse(responseCode = "500", description = "Internal server error")})
+    @GetMapping("/findEntityById/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    EmployeeReadDto findEntityById(@PathVariable("id") Integer id);
+
+
+    @Operation(summary = "This is endpoint to updating database by replacing nulls.", description = "Create request to update database by replacing nulls.", tags = {"Employee"})
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "SUCCESSFULLY. The database has been updated."),
+            @ApiResponse(responseCode = "404", description = "NOT FOUND. The database wasn't found."),
+            @ApiResponse(responseCode = "500", description = "Unexpectable server error")})
+    @PostMapping("/replaceNull")
+    @ResponseStatus(HttpStatus.OK)
+    void replaceNull();
+
+    @Operation(summary = "This is endpoint to sending emails for all users who have to come back home.", description = "Create request to send emails for users have to come back home.", tags = {"Employee"})
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "SUCCESSFULLY. The users successfully recieved emails."),
+            @ApiResponse(responseCode = "404", description = "NOT FOUND. The database wasn't found."),
+            @ApiResponse(responseCode = "500", description = "Unexpectable server error")})
+    @PostMapping("/sendEmailAllWhoMovedFrom")
+    @ResponseStatus(HttpStatus.OK)
+    void sendEmailAllWhoMovedFrom(@RequestParam String country);
+
+    @Operation(summary = "This is endpoint to add passport to employee.", description = "Create request to add passport.", tags = {"Employee"})
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "SUCCESS. Passport was added to employee."),
+            @ApiResponse(responseCode = "400", description = "Invalid input."),
+            @ApiResponse(responseCode = "404", description = "NOT FOUND. DB or Table don't exist."),
+            @ApiResponse(responseCode = "500", description = "Server error.")})
+    @PatchMapping("/addPassport")
+    @ResponseStatus(HttpStatus.OK)
+    EmployeeReadDto addPassport(@RequestParam Integer employeeId, @RequestParam Integer passportId);
+
+    @Operation(summary = "This is endpoint to add passport to employee safely.", description = "Create request to add passport.", tags = {"Employee"})
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "SUCCESS. Passport was added to employee."),
+            @ApiResponse(responseCode = "400", description = "Invalid input."),
+            @ApiResponse(responseCode = "404", description = "NOT FOUND. DB or Table don't exist."),
+            @ApiResponse(responseCode = "500", description = "Server error.")})
+    @PatchMapping("users/{uid}/passports/{pid}")
+    @ResponseStatus(HttpStatus.OK)
+    EmployeeReadDto addPassportSafely(@PathVariable("uid") Integer employeeId, @PathVariable("pid") Integer passportId);
+
+
+}
