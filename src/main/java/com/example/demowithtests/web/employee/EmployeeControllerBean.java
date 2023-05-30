@@ -52,6 +52,12 @@ public class EmployeeControllerBean implements EmployeeController {
     }
 
     @Override
+    public EmployeeReadDto getEmployeeById(String id) {
+        return null;
+    }
+
+
+    @Override
     public EmployeeReadDto getEmployeeById(Integer id) {
         log.info("Controller --> getEmployeeById() - start: id={}", id);
         Employee employee = employeeService.getById(id);
